@@ -18,7 +18,7 @@ def login():
         auth_service.login(data['email'], data['password'])
     except (UserNotFound, InvalidCredentials) as e:
         return json_response.unauthorized()
-    return json_response.success()
+    return json_response.success({"result": "success"})
 
 
 @bp.route('/register/', methods=['POST'])
