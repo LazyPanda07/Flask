@@ -35,9 +35,6 @@ class CategoriesService:
         except sqlite3.Error:
             raise CategoryAlreadyExist
 
-    def get_category_by_name(self, attributes: dict):
-        pass
-
     def get_category_by_id(self, id: int):
         if "user_id" not in session:
             raise UnAuthorized
