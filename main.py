@@ -32,14 +32,23 @@ class AuthRequestService:
         url = 'http://127.0.0.1:5000/auth/logout/'
         return self.session.get(url=url)
 
+    def create_category(self):
+        url = "http://127.0.0.1:5000/categories/"
+        data = {
+            "name": "еда"
+        }
+
+        return self.session.post(url=url, json=data)
+
 
 def main():
     service = AuthRequestService()
 
-    print("REGISTER STATUS: ", service.register().status_code)
     print("LOGIN STATUS: ", service.login().status_code)
-    print("PROFILE STATUS: ", service.profile().status_code, " CONTENT: ", service.profile().content)
-    print("LOGOUT STATUS: ", service.logout().status_code)
+    print("CATEGORIES STATUS: ", service.create_category().status_code)
+
+    # print("PROFILE STATUS: ", service.profile().status_code, " CONTENT: ", service.profile().content)
+    # print("LOGOUT STATUS: ", service.logout().status_code)
 
 
 if __name__ == '__main__':

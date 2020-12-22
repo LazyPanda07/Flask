@@ -78,3 +78,11 @@ class UserModel(BaseModel):
     """
 
     table_name = 'users'
+
+
+class CategoriesModel(BaseModel):
+    """
+        Таблица категорий
+    """
+
+    table_name = 'categories'

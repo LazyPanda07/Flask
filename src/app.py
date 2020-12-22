@@ -2,6 +2,7 @@ from flask import Flask
 from utils.database import db
 from blueprints.index import bp as index_bp
 from blueprints.auth import bp as auth_bp
+from blueprints.categories import bp as categories_bp
 
 
 def create_app():
@@ -12,6 +13,7 @@ def create_app():
     # Регистрация Blueprint
     app.register_blueprint(index_bp, url_prefix='/')
     app.register_blueprint(auth_bp, url_prefix='/auth/')
+    app.register_blueprint(categories_bp, url_prefix="/categories/")
     # Инициализация БД
     db.init_app(app)
     return app
