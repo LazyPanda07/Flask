@@ -58,12 +58,20 @@ class CategoriesService:
 
         try:
             self.model.update(category_id, attributes)
-        except sqlite3.Error as e:
-            print(e)
+        except sqlite3.Error:
             raise CategoryDoesntExist
 
-    def delete_category_by_id(self, attributes: dict):
-        pass
+    def delete_category_by_id(self, category_id: int):
+        if "user_id" not in session:
+            raise UnAuthorized
+
+        if self.model.get_by_id(category_id)["user_id"] != session["user_id"]:
+            raise CategoryDoesntExist
+
+        try:
+            self.model.delete(category_id)
+        except sqlite3.Error:
+            raise CategoryDoesntExist
 
     def get_categories(self):
         if "user_id" not in session:

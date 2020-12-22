@@ -73,6 +73,13 @@ class BaseModel:
 
     def delete(self, id: int):
         """ Удаляет запись в таблице """
+
+        query = f"""DELETE FROM {self.table_name} WHERE id = {id}"""
+
+        self.connection.execute(query)
+
+        self.connection.commit()
+
         pass
 
 

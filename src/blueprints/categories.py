@@ -59,3 +59,15 @@ def edit_category_by_id(id: int):
         return json_response.unauthorized()
     except CategoryDoesntExist:
         return json_response.not_found()
+
+
+@bp.route('/<id>/', methods=['DELETE'])
+def delete_category_by_id(id: int):
+    categories_service = CategoriesService()
+
+    try:
+        return json_response.success(categories_service.delete_category_by_id(id))
+    except UnAuthorized:
+        return json_response.unauthorized()
+    except CategoryDoesntExist:
+        return json_response.not_found()

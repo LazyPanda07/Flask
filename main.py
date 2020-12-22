@@ -53,6 +53,14 @@ class AuthRequestService:
 
         return self.session.patch(url=url, json=data)
 
+    def delete_category(self):
+        url = "http://127.0.0.1:5000/categories/1/"
+        data = {
+            "name": "не еда"
+        }
+
+        return self.session.delete(url=url, json=data)
+
 
 def main():
     service = AuthRequestService()
@@ -62,6 +70,7 @@ def main():
     # print("CATEGORIES STATUS: ", service.create_category().status_code)
     # print("CATEGORY RENAME STATUS: ", service.edit_category().status_code)
     # print("CATEGORIES: ", service.get_all_categories().json())
+    # print("DELETE CATEGORY: ", service.delete_category().status_code)
 
     # print("PROFILE STATUS: ", service.profile().status_code, " CONTENT: ", service.profile().content)
     # print("LOGOUT STATUS: ", service.logout().status_code)
