@@ -4,7 +4,8 @@ from services.categories import (
     CategoriesService,
     CategoryDoesntExist,
     CategoryAlreadyExist,
-    UnAuthorized
+    UnAuthorized,
+    NoCategories
 )
 
 bp = Blueprint('categories', __name__)
@@ -19,5 +20,15 @@ def create_category():
         return json_response.success(categories_service.create_category(data))
     except UnAuthorized:
         return json_response.unauthorized()
-    except CategoryDoesntExist:
+    except CategoryAlreadyExist:
+        return json_response.conflict()
+
+
+@bp.route('/', methods=['GET'])
+def get_all_categories():
+    categories_service = CategoriesService()
+
+    try:
+        return json_response.success(categories_service.get_categories())
+    except NoCategories:
         return json_response.not_found()

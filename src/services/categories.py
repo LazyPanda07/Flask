@@ -1,3 +1,4 @@
+import sqlite3
 from flask import session
 from models import CategoriesModel
 
@@ -14,6 +15,10 @@ class UnAuthorized(Exception):
     pass
 
 
+class NoCategories(Exception):
+    pass
+
+
 class CategoriesService:
 
     def __init__(self):
@@ -25,7 +30,10 @@ class CategoriesService:
 
         attributes["user_id"] = session["user_id"]
 
-        return self.get_category_by_id(self.model.create(attributes))
+        try:
+            return self.get_category_by_id(self.model.create(attributes))
+        except sqlite3.Error:
+            raise CategoryAlreadyExist
 
     def get_category_by_name(self, attributes: dict):
         pass
@@ -45,4 +53,12 @@ class CategoriesService:
         pass
 
     def get_categories(self):
-        pass
+        if "user_id" not in session:
+            raise UnAuthorized
+
+        result = self.model.get_by_field("user_id", session["user_id"])
+
+        if result is None:
+            raise NoCategories
+
+        return result
