@@ -4,16 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Авторизация</title>
+    <title>Регистрация</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="js/authorization.js"></script>
+    <script src="js/registration.js"></script>
 
 </head>
 
 <body>
 
     <table>
+        <tr>
+            <td><input type="text" id="first_name" placeholder="Имя"></td>
+        </tr>
+
+        <tr>
+            <td><input type="text" id="last_name" placeholder="Фамилия"></td>
+        </tr>
+
         <tr>
             <td><input type="text" id="email" placeholder="email"></td>
         </tr>
@@ -23,7 +31,7 @@
         </tr>
 
         <tr>
-            <td><button type="submit" onclick="authorization()">Авторизация</button></td>
+            <td><button type="submit" onclick="registration()">Регистрация</button></td>
         </tr>
     </table>
 

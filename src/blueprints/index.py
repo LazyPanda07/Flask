@@ -15,6 +15,16 @@ def login():
     return send_from_directory("../assets", "authorization.html")
 
 
+@bp.route('/registration/')
+def registration():
+    return send_from_directory("../assets", "registration.html")
+
+
 @bp.route('/authorization/js/authorization.js')
-def send_script():
+def send_authorization_script():
     return send_from_directory("../assets/js", "authorization.js")
+
+
+@bp.route('/registration/js/registration.js')
+def send_registration_script():
+    return send_from_directory("../assets/js", "registration.js")
