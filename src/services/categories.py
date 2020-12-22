@@ -20,8 +20,10 @@ class CategoriesService:
         self.model = CategoriesModel()
 
     def create_category(self, attributes: dict):
-        if not "user_id" in session:
+        if "user_id" not in session:
             raise UnAuthorized
+
+        attributes["user_id"] = session["user_id"]
 
         return self.get_category_by_id(self.model.create(attributes))
 
