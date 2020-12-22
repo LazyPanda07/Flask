@@ -6,7 +6,7 @@ function authorization()
     };
 
     $.post({
-        url: "auth/login/",
+        url: "/auth/login/",
         data: JSON.stringify(json),
         dataType: "json",
         contentType: "application/json",

@@ -9,6 +9,12 @@ bp = Blueprint('index', __name__)
 def index():
     return send_from_directory("../assets", "index.html")
 
-@bp.route('/script.js')
+
+@bp.route('/authorization/')
+def login():
+    return send_from_directory("../assets", "authorization.html")
+
+
+@bp.route('/authorization/js/authorization.js')
 def send_script():
-    return send_from_directory("../assets", "script.js")
+    return send_from_directory("../assets/js", "authorization.js")
