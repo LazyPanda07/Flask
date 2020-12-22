@@ -49,8 +49,18 @@ class CategoriesService:
 
         return category
 
-    def edit_category_by_id(self, attributes: dict):
-        pass
+    def edit_category_by_id(self, category_id: int, attributes: dict):
+        if "user_id" not in session:
+            raise UnAuthorized
+
+        if self.model.get_by_id(category_id)["user_id"] != session["user_id"]:
+            raise CategoryDoesntExist
+
+        try:
+            self.model.update(category_id, attributes)
+        except sqlite3.Error as e:
+            print(e)
+            raise CategoryDoesntExist
 
     def delete_category_by_id(self, attributes: dict):
         pass

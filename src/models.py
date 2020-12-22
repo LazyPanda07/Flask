@@ -64,7 +64,12 @@ class BaseModel:
 
     def update(self, id: int, attributes: dict):
         """ Изменяет запись в таблице """
-        pass
+
+        query = f"""UPDATE {self.table_name} SET {''.join([f"{key} = '{value}', " for key, value in attributes.items()])[:-2]} WHERE id = {id}"""
+
+        self.connection.execute(query)
+
+        self.connection.commit()
 
     def delete(self, id: int):
         """ Удаляет запись в таблице """
