@@ -30,5 +30,19 @@ def get_all_categories():
 
     try:
         return json_response.success(categories_service.get_categories())
+    except UnAuthorized:
+        return json_response.unauthorized()
     except NoCategories:
+        return json_response.not_found()
+
+
+@bp.route('/<id>/', methods=['GET'])
+def get_category_by_id(id: int):
+    categories_service = CategoriesService()
+
+    try:
+        return categories_service.get_category_by_id(id)
+    except UnAuthorized:
+        return json_response.unauthorized()
+    except CategoryDoesntExist:
         return json_response.not_found()

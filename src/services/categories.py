@@ -39,6 +39,9 @@ class CategoriesService:
         pass
 
     def get_category_by_id(self, id: int):
+        if "user_id" not in session:
+            raise UnAuthorized
+
         category = self.model.get_by_id(id)
 
         if category is None:
