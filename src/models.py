@@ -66,11 +66,10 @@ class BaseModel:
         """ Изменяет запись в таблице """
 
         field_names = attributes.keys()
-        field_values = tuple(attributes.values())
-
+        field_values = tuple(attributes.values()) + (id,)
         placeholder = " = ?, ".join(field_names) + " = ?"
 
-        query = f"""UPDATE {self.table_name} SET {placeholder} WHERE id = {id}"""
+        query = f"""UPDATE {self.table_name} SET {placeholder} WHERE id = ?"""
 
         cursor = self.connection.execute(query, field_values)
         self.connection.commit()
@@ -80,13 +79,12 @@ class BaseModel:
     def delete(self, id: int):
         """ Удаляет запись в таблице """
 
-        query = f"""DELETE FROM {self.table_name} WHERE id = {id}"""
+        query = f"""DELETE FROM {self.table_name} WHERE id = ?"""
+        values = (id,)
 
-        self.connection.execute(query)
+        self.connection.execute(query, values)
 
         self.connection.commit()
-
-        pass
 
 
 class UserModel(BaseModel):

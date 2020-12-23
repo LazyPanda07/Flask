@@ -46,7 +46,7 @@ class AuthRequestService:
         return self.session.get(url=url)
 
     def edit_category(self):
-        url = "http://127.0.0.1:5000/categories/2/"
+        url = "http://127.0.0.1:5000/categories/4/"
         data = {
             "name": "не еда"
         }
@@ -54,7 +54,7 @@ class AuthRequestService:
         return self.session.patch(url=url, json=data)
 
     def delete_category(self):
-        url = "http://127.0.0.1:5000/categories/2/"
+        url = "http://127.0.0.1:5000/categories/4/"
         data = {
             "name": "не еда"
         }
