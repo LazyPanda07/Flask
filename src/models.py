@@ -65,11 +65,17 @@ class BaseModel:
     def update(self, id: int, attributes: dict):
         """ Изменяет запись в таблице """
 
-        query = f"""UPDATE {self.table_name} SET {''.join([f"{key} = '{value}', " for key, value in attributes.items()])[:-2]} WHERE id = {id}"""
+        field_names = attributes.keys()
+        field_values = tuple(attributes.values())
 
-        self.connection.execute(query)
+        placeholder = " = ?, ".join(field_names) + " = ?"
 
+        query = f"""UPDATE {self.table_name} SET {placeholder} WHERE id = {id}"""
+
+        cursor = self.connection.execute(query, field_values)
         self.connection.commit()
+
+        return cursor.lastrowid
 
     def delete(self, id: int):
         """ Удаляет запись в таблице """
