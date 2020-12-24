@@ -5,6 +5,7 @@ from services.transactions import (
     TransactionDoesntExist,
     NoTransactions
 )
+from blueprints.categories import check_id_type
 from services.categories import UnAuthorized
 
 bp = Blueprint('transactions', __name__)
@@ -34,12 +35,8 @@ def create_transaction():
 
 
 @bp.route('/<id>/', methods=['GET'])
+@check_id_type
 def get_transaction_by_id(id: int):
-    try:
-        id = int(id)
-    except ValueError:
-        return json_response.bad_request()
-
     transaction_service = TransactionsService()
 
     try:
@@ -51,12 +48,8 @@ def get_transaction_by_id(id: int):
 
 
 @bp.route('/<id>/', methods=['PATCH'])
+@check_id_type
 def edit_transaction(id: int):
-    try:
-        id = int(id)
-    except ValueError:
-        return json_response.bad_request()
-
     data = request.get_json()
     transaction_service = TransactionsService()
 
@@ -69,12 +62,8 @@ def edit_transaction(id: int):
 
 
 @bp.route('/<id>/', methods=['DELETE'])
+@check_id_type
 def delete_transaction(id: int):
-    try:
-        id = int(id)
-    except ValueError:
-        return json_response.bad_request()
-
     transaction_service = TransactionsService()
 
     try:

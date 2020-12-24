@@ -11,6 +11,18 @@ from services.categories import (
 bp = Blueprint('categories', __name__)
 
 
+def check_id_type(function):
+    def wrapper(id):
+        try:
+            id = int(id)
+        except ValueError:
+            return json_response.bad_request()
+
+        return function(id)
+
+    return wrapper
+
+
 @bp.route('/', methods=['POST'])
 def create_category():
     data = request.get_json()
@@ -37,12 +49,8 @@ def get_categories():
 
 
 @bp.route('/<id>/', methods=['GET'])
+@check_id_type
 def get_category_by_id(id: int):
-    try:
-        id = int(id)
-    except ValueError:
-        return json_response.bad_request()
-
     categories_service = CategoriesService()
 
     try:
@@ -54,11 +62,8 @@ def get_category_by_id(id: int):
 
 
 @bp.route('/<id>/', methods=['PATCH'])
+@check_id_type
 def edit_category_by_id(id: int):
-    try:
-        id = int(id)
-    except ValueError:
-        return json_response.bad_request()
 
     data = request.get_json()
     categories_service = CategoriesService()
@@ -72,12 +77,8 @@ def edit_category_by_id(id: int):
 
 
 @bp.route('/<id>/', methods=['DELETE'])
+@check_id_type
 def delete_category_by_id(id: int):
-    try:
-        id = int(id)
-    except ValueError:
-        return json_response.bad_request()
-
     categories_service = CategoriesService()
 
     try:

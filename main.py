@@ -46,7 +46,7 @@ class AuthRequestService:
         return self.session.get(url=url)
 
     def get_category(self):
-        url = "http://127.0.0.1:5000/categories/8/"
+        url = "http://127.0.0.1:5000/categories/qwe/"
 
         return self.session.get(url=url)
 
@@ -109,15 +109,15 @@ def main():
 
     print("REGISTRATION STATUS: ", service.register().status_code)
     print("LOGIN STATUS: ", service.login().status_code)
-    print("EDIT TRANSACTION STATUS: ", service.edit_transaction().status_code)
-    print("DELETE TRANSACTION STATUS: ", service.delete_transaction().status_code)
+    # print("EDIT TRANSACTION STATUS: ", service.edit_transaction().status_code)
+    # print("DELETE TRANSACTION STATUS: ", service.delete_transaction().status_code)
     # print("CREATE TRANSACTION: ", service.create_transaction().status_code)
 
     # print("CATEGORIES STATUS: ", service.create_category().status_code)
     # print("CATEGORY RENAME STATUS: ", service.edit_category().status_code)
     # print("CATEGORIES: ", service.get_all_categories().json())
     # print("DELETE CATEGORY: ", service.delete_category().status_code)
-    # print("GET CATEGORY: ", service.get_category().status_code)
+    print("GET CATEGORY: ", service.get_category().status_code)
 
     # print("PROFILE STATUS: ", service.profile().status_code, " CONTENT: ", service.profile().content)
     # print("LOGOUT STATUS: ", service.logout().status_code)
