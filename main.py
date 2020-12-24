@@ -89,15 +89,19 @@ class AuthRequestService:
         return self.session.get(url=url)
 
     def edit_transaction(self):
-        pass
         url = "http://127.0.0.1:5000/transactions/5/"
         data = {
             "sum": 1000.00,
-            "description": "Чет другой сок нужен, угу",
+            "description": "Другое описание",
             "category_id": 8
         }
 
         return self.session.patch(url=url, json=data)
+
+    def delete_transaction(self):
+        url = "http://127.0.0.1:5000/transactions/5/"
+
+        return self.session.delete(url=url)
 
 
 def main():
@@ -106,6 +110,7 @@ def main():
     print("REGISTRATION STATUS: ", service.register().status_code)
     print("LOGIN STATUS: ", service.login().status_code)
     print("EDIT TRANSACTION STATUS: ", service.edit_transaction().status_code)
+    print("DELETE TRANSACTION STATUS: ", service.delete_transaction().status_code)
     # print("CREATE TRANSACTION: ", service.create_transaction().status_code)
 
     # print("CATEGORIES STATUS: ", service.create_category().status_code)

@@ -66,3 +66,21 @@ def edit_transaction(id: int):
         return json_response.unauthorized()
     except TransactionDoesntExist:
         return json_response.not_found()
+
+
+@bp.route('/<id>/', methods=['DELETE'])
+def delete_transaction(id: int):
+    try:
+        id = int(id)
+    except ValueError:
+        return json_response.bad_request()
+
+    transaction_service = TransactionsService()
+
+    try:
+        transaction_service.delete_transaction_by_id(id)
+        return json_response.deleted()
+    except UnAuthorized:
+        return json_response.unauthorized()
+    except TransactionDoesntExist:
+        return json_response.not_found()

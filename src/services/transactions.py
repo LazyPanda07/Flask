@@ -59,4 +59,4 @@ class TransactionsService:
     @check_authorization
     @_check_same_user_id
     def delete_transaction_by_id(self, id: int):
-        pass
+        self.model.delete(id)
