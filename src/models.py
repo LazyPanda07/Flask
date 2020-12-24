@@ -102,3 +102,11 @@ class CategoriesModel(BaseModel):
     """
 
     table_name = 'categories'
+
+
+class TransactionsModel(BaseModel):
+    """
+        Таблица транзакций
+    """
+
+    table_name = 'transactions'

@@ -4,9 +4,8 @@ CREATE TABLE IF NOT EXISTS "transactions" (
 	"description"	TEXT NOT NULL,
 	"sum"	REAL NOT NULL,
 	"type"	INTEGER NOT NULL CHECK(type=1 OR type=2),
-	"category_id"	INTEGER NOT NULL,
-	"date_time"	TEXT DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY("category_id") REFERENCES "categories"("id")
+	"category_id"	INTEGER,
+	"date_time"	TEXT DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE IF NOT EXISTS "users" (
 	"id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,

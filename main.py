@@ -61,16 +61,35 @@ class AuthRequestService:
 
         return self.session.delete(url=url, json=data)
 
+    def create_transaction(self):
+        url = "http://127.0.0.1:5000/transactions/"
+        data = {
+            "type": 2,
+            "sum": 1800.00,
+            "description": "Купили коробку сока Рич",
+            "category_id": "null",
+            "date_time": "2020-04-15 06:00"
+        }
+
+        return self.session.post(url=url, json=data)
+
+    def get_transaction_by_id(self):
+        url = "http://127.0.0.1:5000/transactions/2/"
+
+        return self.session.get(url=url)
+
 
 def main():
     service = AuthRequestService()
 
     print("REGISTRATION STATUS: ", service.register().status_code)
     print("LOGIN STATUS: ", service.login().status_code)
-    print("CATEGORIES STATUS: ", service.create_category().status_code)
-    print("CATEGORY RENAME STATUS: ", service.edit_category().status_code)
-    print("CATEGORIES: ", service.get_all_categories().json())
-    print("DELETE CATEGORY: ", service.delete_category().status_code)
+    print(service.get_transaction_by_id().status_code)
+
+    # print("CATEGORIES STATUS: ", service.create_category().status_code)
+    # print("CATEGORY RENAME STATUS: ", service.edit_category().status_code)
+    # print("CATEGORIES: ", service.get_all_categories().json())
+    # print("DELETE CATEGORY: ", service.delete_category().status_code)
 
     # print("PROFILE STATUS: ", service.profile().status_code, " CONTENT: ", service.profile().content)
     # print("LOGOUT STATUS: ", service.logout().status_code)
