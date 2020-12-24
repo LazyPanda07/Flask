@@ -74,7 +74,12 @@ class AuthRequestService:
         return self.session.post(url=url, json=data)
 
     def get_transaction_by_id(self):
-        url = "http://127.0.0.1:5000/transactions/2/"
+        url = "http://127.0.0.1:5000/transactions/3/"
+
+        return self.session.get(url=url)
+
+    def get_transactions(self):
+        url = "http://127.0.0.1:5000/transactions/"
 
         return self.session.get(url=url)
 
@@ -84,7 +89,8 @@ def main():
 
     print("REGISTRATION STATUS: ", service.register().status_code)
     print("LOGIN STATUS: ", service.login().status_code)
-    print(service.get_transaction_by_id().status_code)
+    # print("CREATE TRANSACTION: ", service.create_transaction().status_code)
+    print(service.get_transactions().json())
 
     # print("CATEGORIES STATUS: ", service.create_category().status_code)
     # print("CATEGORY RENAME STATUS: ", service.edit_category().status_code)

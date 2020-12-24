@@ -25,7 +25,7 @@ def create_category():
 
 
 @bp.route('/', methods=['GET'])
-def get_all_categories():
+def get_categories():
     categories_service = CategoriesService()
 
     try:

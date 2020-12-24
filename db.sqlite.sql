@@ -5,7 +5,9 @@ CREATE TABLE IF NOT EXISTS "transactions" (
 	"sum"	REAL NOT NULL,
 	"type"	INTEGER NOT NULL CHECK(type=1 OR type=2),
 	"category_id"	INTEGER,
-	"date_time"	TEXT DEFAULT CURRENT_TIMESTAMP
+	"user_id"	INTEGER,
+	"date_time"	TEXT DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY("user_id") REFERENCES "users"("id")
 );
 CREATE TABLE IF NOT EXISTS "users" (
 	"id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,

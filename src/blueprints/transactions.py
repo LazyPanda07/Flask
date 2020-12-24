@@ -11,8 +11,15 @@ bp = Blueprint('transactions', __name__)
 
 
 @bp.route('/', methods=['GET'])
-def get_all_transactions():
-    pass
+def get_transactions():
+    transaction_service = TransactionsService()
+
+    try:
+        return json_response.success(transaction_service.get_transactions())
+    except UnAuthorized:
+        return json_response.unauthorized()
+    except NoTransactions:
+        return json_response.not_found()
 
 
 @bp.route('/', methods=['POST'])
@@ -26,7 +33,7 @@ def create_transaction():
         return json_response.unauthorized()
 
 
-@bp.route('/<id>/', methods=["GET"])
+@bp.route('/<id>/', methods=['GET'])
 def get_transaction_by_id(id: int):
     try:
         id = int(id)

@@ -47,7 +47,7 @@ class CategoriesService:
     def get_category_by_id(self, id: int):
         category = self.model.get_by_id(id)
 
-        if category is None:
+        if category is None or category["user_id"] != session["user_id"]:
             raise CategoryDoesntExist
 
         return category
@@ -74,7 +74,7 @@ class CategoriesService:
 
     @check_authorization
     def get_categories(self):
-        result = self.model.get_by_field("user_id", session["user_id"])
+        result = self.model.get_list_condition(f"user_id = {session['user_id']}")
 
         if result is None:
             raise NoCategories

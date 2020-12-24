@@ -23,6 +23,15 @@ class BaseModel:
         result = self.connection.execute(query).fetchall()
         return [dict(row) for row in result]
 
+    def get_list_condition(self, condition: str):
+        """ Возвращает список всех записей из таблицы с условием """
+
+        query = f"""
+                    SELECT * FROM {self.table_name} WHERE {condition}
+                """
+        result = self.connection.execute(query).fetchall()
+        return [dict(row) for row in result]
+
     def get_by_id(self, id: int):
         """ Возвращает запись по её ID """
         query = f"""
