@@ -19,15 +19,23 @@ class NoCategories(Exception):
     pass
 
 
+def check_authorization(function):
+    def wrapper(*args, **kwargs):
+        if "user_id" not in session:
+            raise UnAuthorized
+
+        return function(*args, **kwargs)
+
+    return wrapper
+
+
 class CategoriesService:
 
     def __init__(self):
         self.model = CategoriesModel()
 
+    @check_authorization
     def create_category(self, attributes: dict):
-        if "user_id" not in session:
-            raise UnAuthorized
-
         attributes["user_id"] = session["user_id"]
 
         try:
@@ -35,10 +43,8 @@ class CategoriesService:
         except sqlite3.Error:
             raise CategoryAlreadyExist
 
+    @check_authorization
     def get_category_by_id(self, id: int):
-        if "user_id" not in session:
-            raise UnAuthorized
-
         category = self.model.get_by_id(id)
 
         if category is None:
@@ -46,10 +52,8 @@ class CategoriesService:
 
         return category
 
+    @check_authorization
     def edit_category_by_id(self, category_id: int, attributes: dict):
-        if "user_id" not in session:
-            raise UnAuthorized
-
         if self.model.get_by_id(category_id)["user_id"] != session["user_id"]:
             raise CategoryDoesntExist
 
@@ -58,10 +62,8 @@ class CategoriesService:
         except sqlite3.Error:
             raise CategoryDoesntExist
 
+    @check_authorization
     def delete_category_by_id(self, category_id: int):
-        if "user_id" not in session:
-            raise UnAuthorized
-
         if self.model.get_by_id(category_id)["user_id"] != session["user_id"]:
             raise CategoryDoesntExist
 
@@ -70,10 +72,8 @@ class CategoriesService:
         except sqlite3.Error:
             raise CategoryDoesntExist
 
+    @check_authorization
     def get_categories(self):
-        if "user_id" not in session:
-            raise UnAuthorized
-
         result = self.model.get_by_field("user_id", session["user_id"])
 
         if result is None:
