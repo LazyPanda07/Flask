@@ -43,7 +43,25 @@ def get_transaction_by_id(id: int):
     transaction_service = TransactionsService()
 
     try:
-        return transaction_service.get_transaction_by_id(id)
+        return json_response.success(transaction_service.get_transaction_by_id(id))
+    except UnAuthorized:
+        return json_response.unauthorized()
+    except TransactionDoesntExist:
+        return json_response.not_found()
+
+
+@bp.route('/<id>/', methods=['PATCH'])
+def edit_transaction(id: int):
+    try:
+        id = int(id)
+    except ValueError:
+        return json_response.bad_request()
+
+    data = request.get_json()
+    transaction_service = TransactionsService()
+
+    try:
+        return json_response.success(transaction_service.edit_transaction_by_id(id, data))
     except UnAuthorized:
         return json_response.unauthorized()
     except TransactionDoesntExist:
