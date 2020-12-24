@@ -38,6 +38,9 @@ def get_all_categories():
 
 @bp.route('/<id>/', methods=['GET'])
 def get_category_by_id(id: int):
+    if not isinstance(id, int):
+        return json_response.bad_request()
+
     categories_service = CategoriesService()
 
     try:
@@ -50,6 +53,9 @@ def get_category_by_id(id: int):
 
 @bp.route('/<id>/', methods=['PATCH'])
 def edit_category_by_id(id: int):
+    if not isinstance(id, int):
+        return json_response.bad_request()
+
     data = request.get_json()
     categories_service = CategoriesService()
 
@@ -63,6 +69,9 @@ def edit_category_by_id(id: int):
 
 @bp.route('/<id>/', methods=['DELETE'])
 def delete_category_by_id(id: int):
+    if not isinstance(id, int):
+        return json_response.bad_request()
+
     categories_service = CategoriesService()
 
     try:
