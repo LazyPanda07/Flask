@@ -1,10 +1,12 @@
 BEGIN TRANSACTION;
-CREATE TABLE IF NOT EXISTS "categories" (
+CREATE TABLE IF NOT EXISTS "transactions" (
 	"id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	"name"	TEXT NOT NULL,
-	"user_id"	INTEGER NOT NULL,
-	FOREIGN KEY("user_id") REFERENCES "users"("id"),
-	UNIQUE("name","user_id")
+	"description"	TEXT NOT NULL,
+	"sum"	REAL NOT NULL,
+	"type"	INTEGER NOT NULL CHECK(type=1 OR type=2),
+	"category_id"	INTEGER NOT NULL,
+	"date_time"	TEXT DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY("category_id") REFERENCES "categories"("id")
 );
 CREATE TABLE IF NOT EXISTS "users" (
 	"id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -12,5 +14,12 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"last_name"	TEXT NOT NULL,
 	"email"	TEXT NOT NULL UNIQUE,
 	"password"	TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS "categories" (
+	"id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	"name"	TEXT NOT NULL,
+	"user_id"	INTEGER NOT NULL,
+	FOREIGN KEY("user_id") REFERENCES "users"("id"),
+	UNIQUE("name","user_id")
 );
 COMMIT;
