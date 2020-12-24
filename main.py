@@ -9,7 +9,7 @@ class AuthRequestService:
     def login(self):
         url = 'http://127.0.0.1:5000/auth/login/'
         data = {
-            'email': 'test@test.ru',
+            'email': 'qwe@test.ru',
             'password': '12345678',
         }
         return self.session.post(url=url, json=data)
@@ -21,9 +21,9 @@ class AuthRequestService:
     def register(self):
         url = 'http://127.0.0.1:5000/auth/register/'
         data = {
-            'first_name': 'Ivan',
-            'last_name': 'Ivanov',
-            'email': 'test@test.ru',
+            'first_name': 'qwe',
+            'last_name': 'qweqweqwe',
+            'email': 'qwe@test.ru',
             'password': '12345678',
         }
         return self.session.post(url=url, json=data)
@@ -45,8 +45,13 @@ class AuthRequestService:
 
         return self.session.get(url=url)
 
+    def get_category(self):
+        url = "http://127.0.0.1:5000/categories/8/"
+
+        return self.session.get(url=url)
+
     def edit_category(self):
-        url = "http://127.0.0.1:5000/categories/5/"
+        url = "http://127.0.0.1:5000/categories/8/"
         data = {
             "name": "не еда"
         }
@@ -54,7 +59,7 @@ class AuthRequestService:
         return self.session.patch(url=url, json=data)
 
     def delete_category(self):
-        url = "http://127.0.0.1:5000/categories/5/"
+        url = "http://127.0.0.1:5000/categories/8/"
         data = {
             "name": "не еда"
         }
@@ -90,12 +95,13 @@ def main():
     print("REGISTRATION STATUS: ", service.register().status_code)
     print("LOGIN STATUS: ", service.login().status_code)
     # print("CREATE TRANSACTION: ", service.create_transaction().status_code)
-    print(service.get_transactions().json())
+    # print(service.get_transactions().json())
 
     # print("CATEGORIES STATUS: ", service.create_category().status_code)
-    # print("CATEGORY RENAME STATUS: ", service.edit_category().status_code)
+    print("CATEGORY RENAME STATUS: ", service.edit_category().status_code)
     # print("CATEGORIES: ", service.get_all_categories().json())
-    # print("DELETE CATEGORY: ", service.delete_category().status_code)
+    print("DELETE CATEGORY: ", service.delete_category().status_code)
+    print("GET CATEGORY: ", service.get_category().status_code)
 
     # print("PROFILE STATUS: ", service.profile().status_code, " CONTENT: ", service.profile().content)
     # print("LOGOUT STATUS: ", service.logout().status_code)

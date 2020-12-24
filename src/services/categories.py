@@ -31,6 +31,18 @@ def check_authorization(function):
 
 class CategoriesService:
 
+    def _check_same_user_id(function):
+        def wrapper(self, *args):
+            try:
+                if self.model.get_by_id(args[0])["user_id"] != session["user_id"]:
+                    raise CategoryDoesntExist
+            except Exception:  # None
+                raise CategoryDoesntExist
+
+            return function(self, *args)
+
+        return wrapper
+
     def __init__(self):
         self.model = CategoriesModel()
 
@@ -53,20 +65,16 @@ class CategoriesService:
         return category
 
     @check_authorization
+    @_check_same_user_id
     def edit_category_by_id(self, category_id: int, attributes: dict):
-        if self.model.get_by_id(category_id)["user_id"] != session["user_id"]:
-            raise CategoryDoesntExist
-
         try:
             self.model.update(category_id, attributes)
         except sqlite3.Error:
             raise CategoryDoesntExist
 
     @check_authorization
+    @_check_same_user_id
     def delete_category_by_id(self, category_id: int):
-        if self.model.get_by_id(category_id)["user_id"] != session["user_id"]:
-            raise CategoryDoesntExist
-
         try:
             self.model.delete(category_id)
         except sqlite3.Error:
