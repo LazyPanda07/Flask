@@ -19,3 +19,6 @@ def create_app():
     # Инициализация БД
     db.init_app(app)
     return app
+
+
+create_app().run()

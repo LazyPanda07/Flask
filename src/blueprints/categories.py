@@ -20,6 +20,8 @@ def check_id_type(function):
 
         return function(id)
 
+    wrapper.__name__ = function.__name__
+
     return wrapper
 
 

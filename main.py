@@ -113,11 +113,18 @@ def main():
     # print("DELETE TRANSACTION STATUS: ", service.delete_transaction().status_code)
     # print("CREATE TRANSACTION: ", service.create_transaction().status_code)
 
+    result = service.get_transactions()
+
+    print(result.status_code)
+
+    for i in result.json():
+        print(i)
+
     # print("CATEGORIES STATUS: ", service.create_category().status_code)
     # print("CATEGORY RENAME STATUS: ", service.edit_category().status_code)
     # print("CATEGORIES: ", service.get_all_categories().json())
     # print("DELETE CATEGORY: ", service.delete_category().status_code)
-    print("GET CATEGORY: ", service.get_category().status_code)
+    # print("GET CATEGORY: ", service.get_category().status_code)
 
     # print("PROFILE STATUS: ", service.profile().status_code, " CONTENT: ", service.profile().content)
     # print("LOGOUT STATUS: ", service.logout().status_code)

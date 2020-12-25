@@ -45,9 +45,19 @@ class TransactionsService:
     @check_authorization
     def get_transactions(self):
         result = self.model.get_list_condition(f"user_id = {session['user_id']}")
+        count = 0
+        total = 0.0
 
         if result is None:
             raise NoTransactions
+
+        for i in result:
+            count = count + 1
+            total = total + (float(i["sum"]) if int(i["type"]) == 1 else -float(i["sum"]))
+
+        result.append({"count": count})
+
+        result.append({"total": total})
 
         return result
 
