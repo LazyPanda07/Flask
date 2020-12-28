@@ -1,5 +1,4 @@
 from flask import session
-from services.categories import check_authorization
 from models import TransactionsModel
 
 
@@ -28,23 +27,20 @@ class TransactionsService:
     def __init__(self):
         self.model = TransactionsModel()
 
-    @check_authorization
-    def create_transaction(self, attributes: dict):
-        attributes["user_id"] = session["user_id"]
-        return self.get_transaction_by_id(self.model.create(attributes))
+    def create_transaction(self, attributes: dict, user):
+        attributes["user_id"] = user["id"]
+        return self.get_transaction_by_id(self.model.create(attributes), user)
 
-    @check_authorization
-    def get_transaction_by_id(self, id: int):
+    def get_transaction_by_id(self, id: int, user):
         transaction = self.model.get_by_id(id)
 
-        if transaction is None or transaction["user_id"] != session["user_id"]:
+        if transaction is None or transaction["user_id"] != user["id"]:
             raise TransactionDoesntExist
 
         return transaction
 
-    @check_authorization
-    def get_transactions(self):
-        result = self.model.get_list_condition(f"user_id = {session['user_id']}")
+    def get_transactions(self, user):
+        result = self.model.get_list_condition(f"user_id = {user['id']}")
         count = 0
         total = 0.0
 
@@ -61,12 +57,10 @@ class TransactionsService:
 
         return result
 
-    @check_authorization
     @_check_same_user_id
     def edit_transaction_by_id(self, transaction_id: int, attributes: dict):
         return self.model.get_by_id(self.model.update(transaction_id, attributes))
 
-    @check_authorization
     @_check_same_user_id
     def delete_transaction_by_id(self, id: int):
         self.model.delete(id)

@@ -1,5 +1,6 @@
 from flask import request, Blueprint
 from utils.response import json_response
+from wraps import auth_required
 from services.categories import (
     CategoriesService,
     CategoryDoesntExist,
@@ -11,27 +12,14 @@ from services.categories import (
 bp = Blueprint('categories', __name__)
 
 
-def check_id_type(function):
-    def wrapper(id):
-        try:
-            id = int(id)
-        except ValueError:
-            return json_response.bad_request()
-
-        return function(id)
-
-    wrapper.__name__ = function.__name__
-
-    return wrapper
-
-
 @bp.route('/', methods=['POST'])
-def create_category():
+@auth_required
+def create_category(user):
     data = request.get_json()
     categories_service = CategoriesService()
 
     try:
-        return json_response.success(categories_service.create_category(data))
+        return json_response.success(categories_service.create_category(data, user))
     except UnAuthorized:
         return json_response.unauthorized()
     except CategoryAlreadyExist:
@@ -39,34 +27,34 @@ def create_category():
 
 
 @bp.route('/', methods=['GET'])
-def get_categories():
+@auth_required
+def get_categories(user):
     categories_service = CategoriesService()
 
     try:
-        return json_response.success(categories_service.get_categories())
+        return json_response.success(categories_service.get_categories(user))
     except UnAuthorized:
         return json_response.unauthorized()
     except NoCategories:
         return json_response.not_found()
 
 
-@bp.route('/<id>/', methods=['GET'])
-@check_id_type
-def get_category_by_id(id: int):
+@bp.route('/<int:id>/', methods=['GET'])
+@auth_required
+def get_category_by_id(id: int, user):
     categories_service = CategoriesService()
 
     try:
-        return categories_service.get_category_by_id(id)
+        return categories_service.get_category_by_id(id, user)
     except UnAuthorized:
         return json_response.unauthorized()
     except CategoryDoesntExist:
         return json_response.not_found()
 
 
-@bp.route('/<id>/', methods=['PATCH'])
-@check_id_type
-def edit_category_by_id(id: int):
-
+@bp.route('/<int:id>/', methods=['PATCH'])
+@auth_required
+def edit_category_by_id(id: int, user):
     data = request.get_json()
     categories_service = CategoriesService()
 
@@ -78,9 +66,9 @@ def edit_category_by_id(id: int):
         return json_response.not_found()
 
 
-@bp.route('/<id>/', methods=['DELETE'])
-@check_id_type
-def delete_category_by_id(id: int):
+@bp.route('/<int:id>/', methods=['DELETE'])
+@auth_required
+def delete_category_by_id(id: int, user):
     categories_service = CategoriesService()
 
     try:

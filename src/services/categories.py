@@ -19,16 +19,6 @@ class NoCategories(Exception):
     pass
 
 
-def check_authorization(function):
-    def wrapper(*args, **kwargs):
-        if "user_id" not in session:
-            raise UnAuthorized
-
-        return function(*args, **kwargs)
-
-    return wrapper
-
-
 class CategoriesService:
 
     def _check_same_user_id(function):
@@ -46,25 +36,22 @@ class CategoriesService:
     def __init__(self):
         self.model = CategoriesModel()
 
-    @check_authorization
-    def create_category(self, attributes: dict):
-        attributes["user_id"] = session["user_id"]
+    def create_category(self, attributes: dict, user):
+        attributes["user_id"] = user["id"]
 
         try:
-            return self.get_category_by_id(self.model.create(attributes))
+            return self.get_category_by_id(self.model.create(attributes), user)
         except sqlite3.Error:
             raise CategoryAlreadyExist
 
-    @check_authorization
-    def get_category_by_id(self, id: int):
+    def get_category_by_id(self, id: int, user):
         category = self.model.get_by_id(id)
 
-        if category is None or category["user_id"] != session["user_id"]:
+        if category is None or category["user_id"] != user["id"]:
             raise CategoryDoesntExist
 
         return category
 
-    @check_authorization
     @_check_same_user_id
     def edit_category_by_id(self, category_id: int, attributes: dict):
         try:
@@ -72,7 +59,6 @@ class CategoriesService:
         except sqlite3.Error:
             raise CategoryDoesntExist
 
-    @check_authorization
     @_check_same_user_id
     def delete_category_by_id(self, category_id: int):
         try:
@@ -80,9 +66,8 @@ class CategoriesService:
         except sqlite3.Error:
             raise CategoryDoesntExist
 
-    @check_authorization
-    def get_categories(self):
-        result = self.model.get_list_condition(f"user_id = {session['user_id']}")
+    def get_categories(self, user):
+        result = self.model.get_list_condition(f"user_id = {user['id']}")
 
         if result is None:
             raise NoCategories

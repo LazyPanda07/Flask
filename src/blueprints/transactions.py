@@ -1,22 +1,23 @@
 from flask import request, Blueprint
 from utils.response import json_response
+from wraps import auth_required
 from services.transactions import (
     TransactionsService,
     TransactionDoesntExist,
     NoTransactions
 )
-from blueprints.categories import check_id_type
 from services.categories import UnAuthorized
 
 bp = Blueprint('transactions', __name__)
 
 
 @bp.route('/', methods=['GET'])
-def get_transactions():
+@auth_required
+def get_transactions(user):
     transaction_service = TransactionsService()
 
     try:
-        return json_response.success(transaction_service.get_transactions())
+        return json_response.success(transaction_service.get_transactions(user))
     except UnAuthorized:
         return json_response.unauthorized()
     except NoTransactions:
@@ -24,32 +25,33 @@ def get_transactions():
 
 
 @bp.route('/', methods=['POST'])
-def create_transaction():
+@auth_required
+def create_transaction(user):
     data = request.get_json()
     transaction_service = TransactionsService()
 
     try:
-        return json_response.success(transaction_service.create_transaction(data))
+        return json_response.success(transaction_service.create_transaction(data, user))
     except UnAuthorized:
         return json_response.unauthorized()
 
 
-@bp.route('/<id>/', methods=['GET'])
-@check_id_type
-def get_transaction_by_id(id: int):
+@bp.route('/<int:id>/', methods=['GET'])
+@auth_required
+def get_transaction_by_id(id: int, user):
     transaction_service = TransactionsService()
 
     try:
-        return json_response.success(transaction_service.get_transaction_by_id(id))
+        return json_response.success(transaction_service.get_transaction_by_id(id, user))
     except UnAuthorized:
         return json_response.unauthorized()
     except TransactionDoesntExist:
         return json_response.not_found()
 
 
-@bp.route('/<id>/', methods=['PATCH'])
-@check_id_type
-def edit_transaction(id: int):
+@bp.route('/<int:id>/', methods=['PATCH'])
+@auth_required
+def edit_transaction(id: int, user):
     data = request.get_json()
     transaction_service = TransactionsService()
 
@@ -61,9 +63,9 @@ def edit_transaction(id: int):
         return json_response.not_found()
 
 
-@bp.route('/<id>/', methods=['DELETE'])
-@check_id_type
-def delete_transaction(id: int):
+@bp.route('/<int:id>/', methods=['DELETE'])
+@auth_required
+def delete_transaction(id: int, user):
     transaction_service = TransactionsService()
 
     try:
