@@ -59,7 +59,7 @@ def edit_category_by_id(id: int, user):
     categories_service = CategoriesService()
 
     try:
-        return json_response.success(categories_service.edit_category_by_id(id, data))
+        return json_response.success(categories_service.edit_category_by_id(id, data, user))
     except UnAuthorized:
         return json_response.unauthorized()
     except CategoryDoesntExist:
@@ -72,7 +72,7 @@ def delete_category_by_id(id: int, user):
     categories_service = CategoriesService()
 
     try:
-        return json_response.success(categories_service.delete_category_by_id(id))
+        return json_response.success(categories_service.delete_category_by_id(id, user))
     except UnAuthorized:
         return json_response.unauthorized()
     except CategoryDoesntExist:

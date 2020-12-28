@@ -12,17 +12,10 @@ class NoTransactions(Exception):
 
 class TransactionsService:
 
-    def _check_same_user_id(function):
-        def wrapper(self, *args):
-            try:
-                if self.model.get_by_id(args[0])["user_id"] != session["user_id"]:
-                    raise TransactionDoesntExist
-            except Exception:  # None
-                raise TransactionDoesntExist
-
-            return function(self, *args)
-
-        return wrapper
+    @staticmethod
+    def _check_same_user(user_id: int, transaction: dict):
+        if transaction is None or user_id != transaction["user_id"]:
+            raise TransactionDoesntExist
 
     def __init__(self):
         self.model = TransactionsModel()
@@ -57,10 +50,16 @@ class TransactionsService:
 
         return result
 
-    @_check_same_user_id
-    def edit_transaction_by_id(self, transaction_id: int, attributes: dict):
+    def edit_transaction_by_id(self, transaction_id: int, attributes: dict, user):
+        check = self.model.get_by_id(transaction_id)
+
+        self._check_same_user(user["id"], check)
+
         return self.model.get_by_id(self.model.update(transaction_id, attributes))
 
-    @_check_same_user_id
-    def delete_transaction_by_id(self, id: int):
+    def delete_transaction_by_id(self, id: int, user):
+        check = self.model.get_by_id(id)
+
+        self._check_same_user(user["id"], check)
+
         self.model.delete(id)

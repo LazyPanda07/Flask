@@ -56,7 +56,7 @@ def edit_transaction(id: int, user):
     transaction_service = TransactionsService()
 
     try:
-        return json_response.success(transaction_service.edit_transaction_by_id(id, data))
+        return json_response.success(transaction_service.edit_transaction_by_id(id, data, user))
     except UnAuthorized:
         return json_response.unauthorized()
     except TransactionDoesntExist:
@@ -69,7 +69,7 @@ def delete_transaction(id: int, user):
     transaction_service = TransactionsService()
 
     try:
-        transaction_service.delete_transaction_by_id(id)
+        transaction_service.delete_transaction_by_id(id, user)
         return json_response.deleted()
     except UnAuthorized:
         return json_response.unauthorized()

@@ -21,17 +21,10 @@ class NoCategories(Exception):
 
 class CategoriesService:
 
-    def _check_same_user_id(function):
-        def wrapper(self, *args):
-            try:
-                if self.model.get_by_id(args[0])["user_id"] != session["user_id"]:
-                    raise CategoryDoesntExist
-            except Exception:  # None
-                raise CategoryDoesntExist
-
-            return function(self, *args)
-
-        return wrapper
+    @staticmethod
+    def _check_same_user(user_id: int, category: dict):
+        if category is None or user_id != category["user_id"]:
+            raise CategoryDoesntExist
 
     def __init__(self):
         self.model = CategoriesModel()
@@ -52,15 +45,21 @@ class CategoriesService:
 
         return category
 
-    @_check_same_user_id
-    def edit_category_by_id(self, category_id: int, attributes: dict):
+    def edit_category_by_id(self, category_id: int, attributes: dict, user):
+        check = self.model.get_by_id(category_id)
+
+        self._check_same_user(user["id"], check)
+
         try:
             self.model.update(category_id, attributes)
         except sqlite3.Error:
             raise CategoryDoesntExist
 
-    @_check_same_user_id
-    def delete_category_by_id(self, category_id: int):
+    def delete_category_by_id(self, category_id: int, user):
+        check = self.model.get_by_id(category_id)
+
+        self._check_same_user(user["id"], check)
+
         try:
             self.model.delete(category_id)
         except sqlite3.Error:
