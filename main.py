@@ -46,12 +46,12 @@ class AuthRequestService:
         return self.session.get(url=url)
 
     def get_category(self):
-        url = "http://127.0.0.1:5000/categories/qwe/"
+        url = "http://127.0.0.1:5000/categories/1/"
 
         return self.session.get(url=url)
 
     def edit_category(self):
-        url = "http://127.0.0.1:5000/categories/8/"
+        url = "http://127.0.0.1:5000/categories/1/"
         data = {
             "name": "не еда"
         }
@@ -59,7 +59,7 @@ class AuthRequestService:
         return self.session.patch(url=url, json=data)
 
     def delete_category(self):
-        url = "http://127.0.0.1:5000/categories/8/"
+        url = "http://127.0.0.1:5000/categories/1/"
         data = {
             "name": "не еда"
         }
@@ -72,14 +72,14 @@ class AuthRequestService:
             "type": 2,
             "sum": 1800.00,
             "description": "Купили коробку сока Рич",
-            "category_id": "null",
+            "category_id": None,
             "date_time": "2020-04-15 06:00"
         }
 
         return self.session.post(url=url, json=data)
 
     def get_transaction_by_id(self):
-        url = "http://127.0.0.1:5000/transactions/3/"
+        url = "http://127.0.0.1:5000/transactions/1/"
 
         return self.session.get(url=url)
 
@@ -89,7 +89,7 @@ class AuthRequestService:
         return self.session.get(url=url)
 
     def edit_transaction(self):
-        url = "http://127.0.0.1:5000/transactions/5/"
+        url = "http://127.0.0.1:5000/transactions/1/"
         data = {
             "sum": 1000.00,
             "description": "Другое описание",
@@ -99,7 +99,7 @@ class AuthRequestService:
         return self.session.patch(url=url, json=data)
 
     def delete_transaction(self):
-        url = "http://127.0.0.1:5000/transactions/5/"
+        url = "http://127.0.0.1:5000/transactions/1/"
 
         return self.session.delete(url=url)
 
@@ -109,25 +109,25 @@ def main():
 
     print("REGISTRATION STATUS: ", service.register().status_code)
     print("LOGIN STATUS: ", service.login().status_code)
-    # print("EDIT TRANSACTION STATUS: ", service.edit_transaction().status_code)
-    # print("DELETE TRANSACTION STATUS: ", service.delete_transaction().status_code)
-    # print("CREATE TRANSACTION: ", service.create_transaction().status_code)
+    print("PROFILE STATUS: ", service.profile().status_code, " CONTENT: ", service.profile().content)
 
+    print("CREATE TRANSACTION: ", service.create_transaction().status_code)
+    print("GET TRANSACTION: ", service.get_transaction_by_id().status_code, service.get_transaction_by_id().json())
     result = service.get_transactions()
-
-    print(result.status_code)
-
+    print("GET TRANSACTIONS: ", result.status_code)
     for i in result.json():
         print(i)
+    print("EDIT TRANSACTION: ", service.edit_transaction().status_code)
+    print("GET TRANSACTION: ", service.get_transaction_by_id().status_code, service.get_transaction_by_id().json())
+    print("DELETE TRANSACTION: ", service.delete_transaction().status_code)
 
-    # print("CATEGORIES STATUS: ", service.create_category().status_code)
-    # print("CATEGORY RENAME STATUS: ", service.edit_category().status_code)
-    # print("CATEGORIES: ", service.get_all_categories().json())
-    # print("DELETE CATEGORY: ", service.delete_category().status_code)
-    # print("GET CATEGORY: ", service.get_category().status_code)
-
-    # print("PROFILE STATUS: ", service.profile().status_code, " CONTENT: ", service.profile().content)
-    # print("LOGOUT STATUS: ", service.logout().status_code)
+    print("CREATE CATEGORY: ", service.create_category().status_code)
+    print("GET CATEGORY: ", service.get_category().status_code, service.get_category().json())
+    print("CATEGORIES: ", service.get_all_categories().json())
+    print("EDIT CATEGORY: ", service.edit_category().status_code)
+    print("GET CATEGORY: ", service.get_category().status_code, service.get_category().json())
+    print("DELETE CATEGORY: ", service.delete_category().status_code)
+    print("LOGOUT STATUS: ", service.logout().status_code)
 
 
 if __name__ == '__main__':

@@ -44,6 +44,9 @@ class AuthService:
         user = self.model.get_by_id(user_id)
         if user is None:
             raise UserNotFound
+
+        user.pop("password")
+
         return user
 
     @classmethod

@@ -1,5 +1,6 @@
 from flask import request, Blueprint
 from utils.response import json_response
+from wraps import auth_required
 from services.auth import (
     AuthService,
     UserNotFound,
@@ -33,12 +34,10 @@ def register():
 
 
 @bp.route('/profile/', methods=['GET'])
-def profile():
+@auth_required
+def profile(user):
     auth_service = AuthService()
-    user_id = auth_service.get_auth_user_id()
-    if user_id is None:
-        return json_response.unauthorized()
-    user = auth_service.get_user_profile(user_id)
+    user = auth_service.get_user_profile(user['id'])
     return json_response.success(user)
 
 
